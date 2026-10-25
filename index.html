@@ -2,7 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      viewport-fit=cover is required so env(safe-area-inset-*) resolves to the
+      real notch/status-bar insets used by the Home_Screen_Mode layout (Req 15.7).
+    -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <!-- Legacy Apple Home Screen meta tags (Req 15.6). Kept alongside the web
+         app manifest as belt-and-suspenders for older iOS/iPadOS Safari. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PDF Canvas" />
+    <meta name="theme-color" content="#111827" />
+
+    <!-- Apple touch icon (Req 15.6). %BASE_URL% applies the Vite base path so
+         the reference is correct under a GitHub Pages project subpath.
+         NOTE: iOS historically prefers a PNG apple-touch-icon; a 180x180 PNG
+         (public/apple-touch-icon.png) should be added later. Until then this
+         references the SVG icon. -->
+    <link rel="apple-touch-icon" href="%BASE_URL%icon.svg" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%icon.svg" />
+
+    <!-- Web App Manifest with display: standalone (Req 15.6). %BASE_URL%
+         applies the Vite base path; the manifest's own icon/start_url paths are
+         relative so they resolve against the manifest URL under any base. -->
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+
     <title>PDF Presentation Canvas</title>
   </head>
   <body>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="PDF Presentation Canvas">
+  <rect width="512" height="512" rx="96" fill="#111827"/>
+  <rect x="112" y="96" width="224" height="288" rx="16" fill="#f9fafb"/>
+  <rect x="144" y="144" width="160" height="20" rx="8" fill="#9ca3af"/>
+  <rect x="144" y="188" width="160" height="20" rx="8" fill="#9ca3af"/>
+  <rect x="144" y="232" width="112" height="20" rx="8" fill="#9ca3af"/>
+  <rect x="236" y="236" width="180" height="120" rx="12" fill="#2563eb"/>
+  <path d="M300 356 L372 356 L336 300 Z" fill="#60a5fa"/>
+  <circle cx="300" cy="288" r="18" fill="#bfdbfe"/>
+  <rect x="160" y="408" width="192" height="16" rx="8" fill="#2563eb"/>
+</svg>

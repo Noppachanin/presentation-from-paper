@@ -1,0 +1,90 @@
+# Deployment_Workflow — builds the app with Vite and publishes the static
+# output to GitHub Pages (Requirement 10.3).
+#
+# One-time repository setup (done by a human, not this workflow):
+#   Settings -> Pages -> "Build and deployment" -> Source: "GitHub Actions".
+# This workflow does not change repository settings; it only uses the official
+# Pages actions, which require that source to be selected. See README task 19.2.
+#
+# Project site base path (Requirement 10.2):
+#   The site is served from the project subpath
+#   https://noppachanin.github.io/presentation-from-paper/, so the Vite build
+#   must use base '/presentation-from-paper/'. vite.config.ts reads this from
+#   the VITE_BASE_PATH environment variable (default '/'), so the build step
+#   below sets VITE_BASE_PATH=/presentation-from-paper/.
+#
+# Build-before-publish guarantee (Requirement 10.4):
+#   The "build" job produces the ./dist artifact. The "deploy" job declares
+#   `needs: build`, so it runs only after the build job succeeds. If the build
+#   (tsc -b && vite build) fails, the build job fails, the deploy job is
+#   skipped, deploy-pages never runs, and the previously published version of
+#   the site stays live unchanged.
+
+name: Deploy to GitHub Pages
+
+on:
+  # Publish on every push to the default branch.
+  push:
+    branches: [main]
+  # Allow publishing on demand from the Actions tab.
+  workflow_dispatch:
+
+# Least-privilege permissions required by the Pages deployment actions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment. In-progress runs are left to finish so
+# a published deployment is not interrupted, while queued runs collapse to the
+# latest commit.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Pages
+        # Exposes the Pages base path/origin to the build if needed; emits no
+        # settings changes.
+        uses: actions/configure-pages@v5
+
+      - name: Build with Vite
+        # vite.config.ts reads VITE_BASE_PATH; set the project subpath so asset
+        # URLs resolve under https://noppachanin.github.io/presentation-from-paper/.
+        # A failure here fails the job and skips deploy (Requirement 10.4).
+        run: npm run build
+        env:
+          VITE_BASE_PATH: /presentation-from-paper/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    # Runs only after a successful build, so a failed build never publishes
+    # and the previous version stays live (Requirement 10.4).
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

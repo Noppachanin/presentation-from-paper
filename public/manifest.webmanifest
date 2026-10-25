@@ -1,0 +1,25 @@
+{
+  "name": "PDF Presentation Canvas",
+  "short_name": "PDF Canvas",
+  "description": "Annotate and present PDFs on an infinite canvas, entirely in the browser.",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": "./",
+  "scope": "./",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
